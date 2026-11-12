@@ -1,0 +1,6 @@
+{
+  "name": "KAS OSIS - SMKN 7 Samarinda",
+  "description": "Aplikasi pencatatan uang kas mingguan kelas dan buku kas OSIS SMKN 7 Samarinda dengan transparansi penuh dan rekap otomatis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

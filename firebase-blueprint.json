@@ -1,0 +1,128 @@
+{
+  "entities": {
+    "Pengaturan": {
+      "title": "Pengaturan",
+      "description": "Konfigurasi utama aplikasi KAS OSIS",
+      "type": "object",
+      "properties": {
+        "namaSekolah": { "type": "string", "maxLength": 100 },
+        "namaBendahara": { "type": "string", "maxLength": 100 },
+        "tarifPerSiswa": { "type": "number" },
+        "tahunAjaranAktifId": { "type": "string", "maxLength": 50 },
+        "tanggalMulaiTahunAjaran": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "tanggalAkhirTahunAjaran": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "tanggalMulaiPencatatanPerKelas": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "viewerPasscodeHash": { "type": "string", "maxLength": 64 },
+        "kategoriPemasukan": { "type": "array" },
+        "kategoriPengeluaran": { "type": "array" },
+        "seedLoaded": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["namaSekolah", "tarifPerSiswa", "tahunAjaranAktifId", "tanggalMulaiPencatatanPerKelas", "viewerPasscodeHash"]
+    },
+    "TahunAjaran": {
+      "title": "TahunAjaran",
+      "description": "Periode tahun ajaran",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string", "maxLength": 50 },
+        "tanggalMulai": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "tanggalAkhir": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "isAktif": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["label", "tanggalMulai", "tanggalAkhir"]
+    },
+    "Kelas": {
+      "title": "Kelas",
+      "description": "Daftar kelas dan jumlah siswa",
+      "type": "object",
+      "properties": {
+        "nama": { "type": "string", "maxLength": 50 },
+        "tingkat": { "type": "string", "enum": ["X", "XI"] },
+        "urutan": { "type": "number" },
+        "jumlahSiswa": { "type": "number" },
+        "riwayatSiswa": { "type": "array" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["nama", "tingkat", "urutan", "jumlahSiswa"]
+    },
+    "Setoran": {
+      "title": "Setoran",
+      "description": "Catatan setoran kas mingguan kelas",
+      "type": "object",
+      "properties": {
+        "kelasId": { "type": "string", "maxLength": 50 },
+        "kelasNama": { "type": "string", "maxLength": 50 },
+        "daftarMinggu": { "type": "array" },
+        "jumlahMinggu": { "type": "number" },
+        "jumlahSiswaSnapshot": { "type": "number" },
+        "tarifSnapshot": { "type": "number" },
+        "total": { "type": "number" },
+        "tanggalSetor": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "tahunAjaranId": { "type": "string", "maxLength": 50 },
+        "transaksiId": { "type": "string", "maxLength": 100 },
+        "dibuatPada": { "type": "string" }
+      },
+      "required": ["kelasId", "kelasNama", "daftarMinggu", "jumlahMinggu", "jumlahSiswaSnapshot", "tarifSnapshot", "total", "tanggalSetor", "tahunAjaranId"]
+    },
+    "Transaksi": {
+      "title": "Transaksi",
+      "description": "Catatan buku kas OSIS",
+      "type": "object",
+      "properties": {
+        "jenis": { "type": "string", "enum": ["pemasukan", "pengeluaran"] },
+        "tanggal": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "keterangan": { "type": "string", "maxLength": 300 },
+        "nominal": { "type": "number" },
+        "kategori": { "type": "string", "maxLength": 100 },
+        "setoranId": { "type": "string", "maxLength": 100 },
+        "tahunAjaranId": { "type": "string", "maxLength": 50 },
+        "dibuatPada": { "type": "string" }
+      },
+      "required": ["jenis", "tanggal", "keterangan", "nominal", "kategori", "tahunAjaranId"]
+    },
+    "Riwayat": {
+      "title": "Riwayat",
+      "description": "Audit log perubahan data untuk transparansi",
+      "type": "object",
+      "properties": {
+        "waktu": { "type": "string" },
+        "aksi": { "type": "string", "enum": ["tambah", "ubah", "hapus", "seed"] },
+        "jenisData": { "type": "string", "maxLength": 50 },
+        "ringkasan": { "type": "string", "maxLength": 300 },
+        "nilaiLama": { "type": "string", "maxLength": 1000 },
+        "nilaiBaru": { "type": "string", "maxLength": 1000 },
+        "alasan": { "type": "string", "maxLength": 300 },
+        "userEmail": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["waktu", "aksi", "jenisData", "ringkasan", "alasan"]
+    }
+  },
+  "firestore": {
+    "/pengaturan/{id}": {
+      "schema": "Pengaturan",
+      "description": "Konfigurasi sistem KAS OSIS"
+    },
+    "/tahun_ajaran/{id}": {
+      "schema": "TahunAjaran",
+      "description": "Daftar tahun ajaran"
+    },
+    "/kelas/{id}": {
+      "schema": "Kelas",
+      "description": "Daftar 16 kelas beserta jumlah siswa"
+    },
+    "/setoran/{id}": {
+      "schema": "Setoran",
+      "description": "Setoran kas per kelas"
+    },
+    "/transaksi/{id}": {
+      "schema": "Transaksi",
+      "description": "Transaksi buku kas OSIS"
+    },
+    "/riwayat/{id}": {
+      "schema": "Riwayat",
+      "description": "Log riwayat audit transparansi"
+    }
+  }
+}

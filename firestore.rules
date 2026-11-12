@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /pengaturan/{docId} {
+      allow read, write: if true;
+    }
+    match /tahun_ajaran/{tahunId} {
+      allow read, write: if true;
+    }
+    match /kelas/{kelasId} {
+      allow read, write: if true;
+    }
+    match /setoran/{setoranId} {
+      allow read, write: if true;
+    }
+    match /transaksi/{transaksiId} {
+      allow read, write: if true;
+    }
+    match /riwayat/{riwayatId} {
+      allow read, write: if true;
+    }
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
